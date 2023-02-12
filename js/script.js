@@ -16,10 +16,6 @@ let modal__input = modal.querySelector('input')
 let modal__confirm = modal.querySelector('.modal__confirm')
 let search = document.querySelector('.search')
 
-function openModal() {
-    modal.style.display = 'block'
-    modal__bg.style.display = 'block'
-}
 
 
 function reload(arr) {
@@ -56,7 +52,8 @@ function reload(arr) {
         }
 
         deleteDiv.onclick = () => {
-            openModal()
+            modal.style.display = 'block'
+            modal__bg.style.display = 'block'
         }
 
         modal__close.onclick = () => {
@@ -90,6 +87,7 @@ search.oninput = () => {
 
 function secrhFunc(arr2, place, keySearch = '') {
     place.innerHTML = ''
+
     for (let item of arr2) {
         let liOne = document.createElement('li')
         let del = document.createElement('div')
@@ -100,9 +98,50 @@ function secrhFunc(arr2, place, keySearch = '') {
         liOne.innerHTML = item.Title.replace(`<b>${keySearch}</b>`)
         liOne.append(del)
         place.append(liOne)
+
+        liOne.onclick = () => {
+            showMoviePromo(item)
+            promo__genre.innerHTML = item.Genre
+            promo__title.innerHTML = item.Title
+            promo__descr.innerHTML = item.Plot
+            Imbd.innerHTML = 'IMDb: ' + item.imdbRating
+            kinopoisk.innerHTML = 'Кинопоиск: ' + item.Metascore
+        }
+
+        del.onclick = () => {
+            modal.style.scale = '1'
+            openModal(item.Title)
+            modal.style.background = `url(${item.Poster})`
+        }
+
+        modal__close.onclick = () => {
+            modal.style.scale = '.2'
+            setTimeout(() => {
+                modal.style.display = 'none'
+                modal__bg.style.display = 'none'
+            }, 400);
+
+        }
     }
 }
 
+function openModal(data) {
+    modal.style.display = 'block'
+    modal__bg.style.display = 'block'
+    modal__type.innerHTML = data
+
+    modal__confirm.onclick = () => {
+        if (modal__input.value.trim() === data) {
+            movies = movies.forEach(x => x.Title !== data)
+            modal.style.display = ''
+            modal__bg.style.display = ''
+            modal__input.value = ''
+        }
+        else {
+            alert('error')
+        }
+    }
+}
 
 reload(movies)
 secrhFunc(movies, ul)
