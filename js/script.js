@@ -132,7 +132,8 @@ function openModal(data) {
 
     modal__confirm.onclick = () => {
         if (modal__input.value.trim() === data) {
-            movies = movies.forEach(x => x.Title !== data)
+            // movies = movies.forEach(x => x.Title !== data)
+            // reload(movies, ul)
             modal.style.display = ''
             modal__bg.style.display = ''
             modal__input.value = ''
